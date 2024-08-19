@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>复制链接示例</title>
+    <style>
+        .link {
+            color: blue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="rich-text">
+        <p>这是一些文本，点击这个<a href="https://example.com" class="link" data-url="https://example.com">蓝色链接</a>来访问。</p>
+        <p>你可以选中这个文本并按 Ctrl+C 来复制。</p>
+    </div>
+
+    <script>
+        document.addEventListener('copy', (event) => {
+            const selection = window.getSelection();
+            const selectedText = selection.toString();
+
+            // 检查选中的文本是否在链接内
+            const range = selection.getRangeAt(0);
+            const parentLink = range.startContainer.parentNode.closest('a');
+
+            if (parentLink && selectedText) {
+                const url = parentLink.getAttribute('href'); // 获取链接的 URL
+                const textToCopy = `${selectedText} (${url})`; // 组合文本和 URL
+
+                // 创建一个新的剪贴板数据对象
+                event.clipboardData.setData('text/plain', textToCopy);
+                event.preventDefault(); // 阻止默认的复制行为
+            }
+        });
+    </script>
+</body>
+</html>
